@@ -9,7 +9,8 @@ import { useForm } from "react-hook-form";
 import getStorage from './hooks/getStorage';
 
 //interface
-import { TaskFormState } from './models/interface';
+import { TaskFormState, ConfirmDialogState } from './models/interface';
+
 
 //components
 import Header from "../src/components/Header"
@@ -19,6 +20,7 @@ import ConfirmDialog from './small-components/ConfirmDialog';
 
 
 const App: React.FC = () => {
+  //estados
   const [count, setCount] = useState<number>(0)
   const [newTask, setNewTask] = useState<TaskFormState>({ id: count, task: "", complete: false });
   const [list, setList] = useState<TaskFormState[]>(
@@ -30,31 +32,23 @@ const App: React.FC = () => {
   const [edit, setEdit] = useState<boolean>(false)
   const [estado, setEstado] = useState<string>("todas");
 
-  const [confirmDialog, setConfirmDialog] = useState({
+
+  //estados que controlan l confirm Dialog
+  const [confirmDialog, setConfirmDialog] = useState<ConfirmDialogState>({
     open: false,
     accion: "",
     elemento: "",
     onConfirm: null,
   });
 
-
-  const openDialog = (accion: string, elemento: string) => {
-    setConfirmDialog({
-      open: true,
-      accion: accion,
-      elemento: elemento,
-      onConfirm: null,
-    })
-  }
-  const handleClose = () => {
+  const handleClose = (): void => {
     setConfirmDialog({ ...confirmDialog, open: false });
-
   }
 
+  //hook form
   const { handleSubmit, reset, clearErrors } = useForm({});
 
-  const verificacion = (task: string) => {
-
+  const verificacion = (task: string): boolean => {
     let repeti2 = list.find(item => item.task.toUpperCase() === task.toUpperCase())
     if (repeti2 && !error) {
       setHelperText("Ya agrego esa tarea")
@@ -74,11 +68,9 @@ const App: React.FC = () => {
       setError(false);
       return true;
     }
-
   }
 
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
     let task = e.target.value
     setError(false)
     if (edit) {
@@ -91,7 +83,7 @@ const App: React.FC = () => {
   }
 
   //Funcion para agregar nueva tarea
-  const addNew = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const addNew = (e: React.MouseEvent<HTMLButtonElement>): void => {
     if (verificacion(newTask.task)) {
       if (edit) {
         const newArr = list.map(obj => {
@@ -119,13 +111,13 @@ const App: React.FC = () => {
   }
 
   //funcion para editar tarea existente
-  const editTask = (e: React.MouseEvent<HTMLButtonElement>, item: TaskFormState) => {
+  const editTask = (e: React.MouseEvent<HTMLButtonElement>, item: TaskFormState): void => {
     setEdit(true)
     setNewTask(item)
   }
 
   //funcion que controla el checkbox
-  const completeTask = (e: React.MouseEvent<HTMLButtonElement>, item: TaskFormState) => {
+  const completeTask = (e: React.MouseEvent<HTMLButtonElement>, item: TaskFormState): void => {
     const newArr = list.map(obj => {
       if (obj.id === item.id) {
         item.complete = !item.complete
@@ -138,7 +130,7 @@ const App: React.FC = () => {
   }
 
   //funcion para eliminar tarea
-  const deleteTask = (e: React.MouseEvent<HTMLButtonElement>, item: TaskFormState) => {
+  const deleteTask = (e: React.MouseEvent<HTMLButtonElement>, item: TaskFormState): void => {
     setConfirmDialog({
       open: true,
       accion: "eliminar",
@@ -152,12 +144,12 @@ const App: React.FC = () => {
 
   }
 
-  const changeState = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const changeState = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
     setEstado(e?.target?.value)
   }
 
-  const filterList = () => {
-
+  //funcion para filtrar lista
+  const filterList = (): TaskFormState[] | undefined => {
     if (estado === "todas") { return list }
     else if (estado === "true") { return list.filter(item => item?.complete) }
     else if (estado === "false") { return list.filter(item => !item?.complete) }
