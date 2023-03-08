@@ -1,3 +1,30 @@
-#root {
-  max-width: 1280px;
+.general-container {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center
+}
+
+.header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #9c4bf2;
+  margin: 1rem auto;
+  height: 4rem;
+  width: 70%;
+}
+
+.title {
+  font-size: 50px;
+  color: white;
+  font-weight: 500;
+}
+
+.form-container {
+  margin: 2rem;
+  padding: 2rem;
+  box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0, 0, 0, 0.12)
 }

@@ -1,0 +1,1 @@
+export interface TaskFormState { id: number; task: string; complete: boolean }
