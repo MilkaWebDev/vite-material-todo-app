@@ -14,7 +14,11 @@ const ToDoList = ({ list, editTask, completeTask, deleteTask, estado, filterList
                 <>
                     <SelectCustom estado={estado} changeState={changeState} />
                     <List>
-                        {filterList()?.map((item: TaskFormState) => <Task key={item.id} item={item} editTask={editTask} completeTask={completeTask} deleteTask={deleteTask} />)}
+                        {filterList().length > 0 ? (
+                            (filterList()?.map((item: TaskFormState) => <Task key={item.id} item={item} editTask={editTask} completeTask={completeTask} deleteTask={deleteTask} />))
+                        ) : (
+                            <Typography variant="h6" color="error" style={{ textAlign: "center", marginTop: "3rem" }}>No hay tareas {estado}</Typography>
+                        )}
                     </List>
                 </>
 
@@ -23,5 +27,4 @@ const ToDoList = ({ list, editTask, completeTask, deleteTask, estado, filterList
         </Container>
     );
 }
-
 export default ToDoList

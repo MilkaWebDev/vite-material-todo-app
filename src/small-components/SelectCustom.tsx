@@ -8,6 +8,7 @@ const SelectCustom = ({ estado, changeState }) => {
             <InputLabel id="demo-simple-select-standard-label">Estado de tarea</InputLabel>
             <Select
                 labelId="demo-simple-select-standard-label"
+                color="secondary"
                 id="demo-simple-select-standard"
                 value={estado}
                 onChange={changeState}
@@ -16,8 +17,8 @@ const SelectCustom = ({ estado, changeState }) => {
             >
 
                 <MenuItem value={"todas"}>Todas</MenuItem>
-                <MenuItem value={"false"}>Pendientes</MenuItem>
-                <MenuItem value={"true"}>Completas</MenuItem>
+                <MenuItem value={"pendientes"}>Pendientes</MenuItem>
+                <MenuItem value={"completadas"}>Completas</MenuItem>
             </Select>
         </FormControl>
     )

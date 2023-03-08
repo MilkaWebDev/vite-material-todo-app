@@ -8,6 +8,7 @@ const Task = ({ item, editTask, completeTask, deleteTask }) => {
     return (
         <ListItem key={item.id} >
             <Checkbox
+                color="secondary"
                 checked={item.complete}
                 onChange={(e) => completeTask(e, item)}
                 inputProps={{ 'aria-label': 'controlled' }}

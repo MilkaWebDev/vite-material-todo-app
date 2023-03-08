@@ -4,5 +4,5 @@ export interface ConfirmDialogState {
     open: boolean,
     accion: string,
     elemento: string,
-    onConfirm: (() => void) | null
+    onConfirm: () => void
 }

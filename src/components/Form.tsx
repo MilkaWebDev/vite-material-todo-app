@@ -14,7 +14,7 @@ const Form: React.FC = ({ error, helperText, newTask, addNew, handleChange, edit
                             type="text"
                             id="outlined-basic"
                             fullWidth
-                            label="Ingrese una tarea"
+                            label={(edit ? "Tarea a modificar" : "Ingrese una tarea")}
                             variant="outlined"
                             error={error}
                             autoComplete='off'

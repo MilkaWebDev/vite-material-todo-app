@@ -2,7 +2,6 @@
 import { useState, useEffect, } from 'react';
 import './App.css';
 
-
 //hooks
 import setStorage from './hooks/setStorage';
 import { useForm } from "react-hook-form";
@@ -10,7 +9,6 @@ import getStorage from './hooks/getStorage';
 
 //interface
 import { TaskFormState, ConfirmDialogState } from './models/interface';
-
 
 //components
 import Header from "../src/components/Header"
@@ -32,17 +30,20 @@ const App: React.FC = () => {
   const [edit, setEdit] = useState<boolean>(false)
   const [estado, setEstado] = useState<string>("todas");
 
+  //estados que controlan confirm Dialog
 
-  //estados que controlan l confirm Dialog
-  const [confirmDialog, setConfirmDialog] = useState<ConfirmDialogState>({
+  const INITIAL_STATE_DIALOG =
+  {
     open: false,
     accion: "",
     elemento: "",
-    onConfirm: null,
-  });
+    onConfirm: () => console.log("no agrego funcion"),
+  }
+
+  const [confirmDialog, setConfirmDialog] = useState<ConfirmDialogState>(INITIAL_STATE_DIALOG);
 
   const handleClose = (): void => {
-    setConfirmDialog({ ...confirmDialog, open: false });
+    setConfirmDialog(INITIAL_STATE_DIALOG);
   }
 
   //hook form
@@ -83,7 +84,7 @@ const App: React.FC = () => {
   }
 
   //Funcion para agregar nueva tarea
-  const addNew = (e: React.MouseEvent<HTMLButtonElement>): void => {
+  const addNew = (e: React.MouseEvent<HTMLButtonElement> | React.KeyboardEvent<HTMLDivElement>): void => {
     if (verificacion(newTask.task)) {
       if (edit) {
         const newArr = list.map(obj => {
@@ -151,8 +152,8 @@ const App: React.FC = () => {
   //funcion para filtrar lista
   const filterList = (): TaskFormState[] | undefined => {
     if (estado === "todas") { return list }
-    else if (estado === "true") { return list.filter(item => item?.complete) }
-    else if (estado === "false") { return list.filter(item => !item?.complete) }
+    else if (estado === "completadas") { return list.filter(item => item?.complete) }
+    else if (estado === "pendientes") { return list.filter(item => !item?.complete) }
   }
 
   useEffect(() => {
