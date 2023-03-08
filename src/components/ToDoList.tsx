@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Typography, List, Container, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 import Task from './Task';
-import SelectCustom from './SelectCustom';
+import SelectCustom from '../small-components/SelectCustom';
 import { TaskFormState } from '../models/interface';
 
 const ToDoList = ({ list, editTask, completeTask, deleteTask, estado, filterList, changeState }) => {

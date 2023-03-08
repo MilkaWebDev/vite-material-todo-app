@@ -1,10 +1,8 @@
 import React from 'react'
 import { Grid, Typography } from '@mui/material';
 import '../App.css';
-import useStyles from './styles';
 
 const Header = () => {
-    const classes = useStyles();
 
     return (
         <Grid className='header'>
