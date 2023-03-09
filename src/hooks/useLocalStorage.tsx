@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import { ISnackBar, TaskFormState } from '../models/interface';
 
-export default function useLocalStorage(list: TaskFormState[]) {
-
+export default function useLocalStorage(listaEnEspera: TaskFormState[]) {
     const [loading, setLoading] = useState<boolean>(false);
     const [isFirstRender, setIsFirstRender] = useState<boolean>(true);
+    const [list, setList] = useState<TaskFormState[]>([]);
 
     const INITIAL_STATE_SNACKBAR = {
         message: "",
@@ -26,12 +26,13 @@ export default function useLocalStorage(list: TaskFormState[]) {
             setLoading(true)
             try {
                 const guardarLocal = (clave: string, valor: string): void => { localStorage.setItem(clave, valor) };
-                guardarLocal("ToDoList", JSON.stringify(list));
+                guardarLocal("ToDoList", JSON.stringify(listaEnEspera));
                 setSnackState({
                     open: true,
                     message: `Lista Actualizada`,
                     severity: "success"
                 })
+                setList(listaEnEspera)
             } catch (error) {
                 setSnackState({
                     open: true,
@@ -39,12 +40,12 @@ export default function useLocalStorage(list: TaskFormState[]) {
                     severity: "error"
                 })
             } finally {
-                setLoading(false)
+                setTimeout(function () {
+                    setLoading(false)
+
+                }, 200);
             }
-
         }
-
-    }, [list]);
-
-    return { loading, snackState, CloseSnackState };
+    }, [listaEnEspera]);
+    return { list, loading, snackState, CloseSnackState };
 }

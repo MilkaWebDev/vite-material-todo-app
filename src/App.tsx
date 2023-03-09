@@ -1,10 +1,9 @@
 
-import { useState, useEffect, } from 'react';
+import { useState } from 'react';
 import './App.css';
 
 //hooks
 import { useForm } from "react-hook-form";
-import getStorage from './hooks/getStorage';
 import useLocalStorage from './hooks/useLocalStorage';
 
 
@@ -23,14 +22,14 @@ const App = () => {
   //estados
   const [count, setCount] = useState<number>(0)
   const [newTask, setNewTask] = useState<TaskFormState>({ id: count, task: "", complete: false });
-  const [list, setList] = useState<TaskFormState[]>([]);
+  const [listaEnEspera, setListaEnEspera] = useState<TaskFormState[]>([]);
 
   const [error, setError] = useState<boolean>(false);
   const [helperText, setHelperText] = useState<string>("");
   const [edit, setEdit] = useState<boolean>(false)
   const [estado, setEstado] = useState<string>("todas");
 
-  const { loading, snackState, CloseSnackState } = useLocalStorage(list)
+  const { list, loading, snackState, CloseSnackState } = useLocalStorage(listaEnEspera)
 
 
   //estados que controlan confirm Dialog
@@ -50,6 +49,7 @@ const App = () => {
 
   //hook form
   const { reset } = useForm({});
+  const regex = /^[^\s]{1,}$/;
 
   const verificacion = (task: string): boolean => {
     let repeti2 = list.find(item => item.task.toUpperCase() === task.toUpperCase())
@@ -57,16 +57,10 @@ const App = () => {
       setHelperText("Ya agrego esa tarea")
       setError(true)
       return false;
-    } else if (/\s/g.test(task)) {
-      setHelperText("Este campo no puede tener espacion en blanco")
+    } else if (!regex.test(task)) {
+      setHelperText("No puede agregar tareas en blanco ni con espacios")
       setError(true)
       return false;
-    }
-    else if (task === "") {
-      setHelperText("Este campo no puede tener espacion en blanco")
-      setError(true)
-      return false;
-
     } else {
       setError(false);
       return true;
@@ -95,10 +89,10 @@ const App = () => {
           }
           return obj;
         });
-        setList(newArr);
+        setListaEnEspera(newArr);
 
       } else {
-        setList([...list, newTask])
+        setListaEnEspera([...list, newTask])
         setCount(count + 1)
       }
 
@@ -124,7 +118,7 @@ const App = () => {
       }
       return obj;
     });
-    setList(newArr);
+    setListaEnEspera(newArr);
 
   }
 
@@ -136,7 +130,7 @@ const App = () => {
       elemento: item.task,
       onConfirm: () => {
         let newArr = list.filter(elem => elem.id !== item.id)
-        setList(newArr);
+        setListaEnEspera(newArr);
         handleCloseConfirmDialog();
 
       },
@@ -158,7 +152,7 @@ const App = () => {
   return (
     <div className='general-container'>
       <Header />
-      <Form error={error} helperText={helperText} newTask={newTask} addNew={addNew} handleChange={handleChange} edit={edit} />
+      <Form error={error} helperText={helperText} newTask={newTask} addNew={addNew} handleChange={handleChange} edit={edit} loading={loading} />
       <ToDoList list={list} editTask={editTask} completeTask={completeTask} deleteTask={deleteTask} estado={estado} filterList={filterList} changeState={changeState} loading={loading} />
       <ConfirmDialog open={confirmDialog.open} accion={confirmDialog.accion} elemento={confirmDialog.elemento} onConfirm={confirmDialog.onConfirm} handleClose={handleCloseConfirmDialog} />
       <SnackBar open={snackState.open} message={snackState.message} severity={snackState.severity} handleClose={CloseSnackState} />

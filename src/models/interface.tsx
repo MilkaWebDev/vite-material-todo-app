@@ -10,7 +10,8 @@ export interface IForm {
     newTask: TaskFormState,
     addNew: (e: React.KeyboardEvent<HTMLDivElement> | React.MouseEvent<HTMLButtonElement, MouseEvent>) => void,
     handleChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void,
-    edit: boolean
+    edit: boolean,
+    loading: boolean
 
 }
 
