@@ -1,13 +1,18 @@
 import { useState } from 'react'
-import { Typography, List, Container, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
+import { Typography, List, Container, CircularProgress } from '@mui/material';
 import Task from './Task';
 import SelectCustom from '../small-components/SelectCustom';
-import { TaskFormState } from '../models/interface';
+import { IToDoList, TaskFormState } from '../models/interface'
 
-const ToDoList = ({ list, editTask, completeTask, deleteTask, estado, filterList, changeState }) => {
+const ToDoList = (props: IToDoList) => {
+
+    const { list, editTask, completeTask, deleteTask, estado, filterList, changeState, loading } = props
+
+    if (loading) return (<CircularProgress color="secondary" style={{ marginTop: "3rem" }} />)
 
     return (
         <Container maxWidth="sm">
+
             {!list.length ? (
                 <Typography variant="h6" color="error" style={{ textAlign: "center" }}>No se agregaron tareas aun</Typography>
             ) : (

@@ -2,8 +2,12 @@ import React from 'react'
 import { ListItem, ListItemText, ListItemIcon, IconButton, Checkbox } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
+import { ITask } from '../models/interface'
 
-const Task = ({ item, editTask, completeTask, deleteTask }) => {
+
+const Task = (props: ITask) => {
+
+    const { item, editTask, completeTask, deleteTask } = props
 
     return (
         <ListItem key={item.id} >

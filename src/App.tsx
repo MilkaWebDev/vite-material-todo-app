@@ -3,35 +3,37 @@ import { useState, useEffect, } from 'react';
 import './App.css';
 
 //hooks
-import setStorage from './hooks/setStorage';
 import { useForm } from "react-hook-form";
 import getStorage from './hooks/getStorage';
+import useLocalStorage from './hooks/useLocalStorage';
+
 
 //interface
-import { TaskFormState, ConfirmDialogState } from './models/interface';
+import { TaskFormState, IConfirmDialogState } from './models/interface';
 
 //components
 import Header from "../src/components/Header"
 import Form from './components/Form';
 import ToDoList from './components/ToDoList';
 import ConfirmDialog from './small-components/ConfirmDialog';
+import SnackBar from './small-components/SnackBar';
 
 
-const App: React.FC = () => {
+const App = () => {
   //estados
   const [count, setCount] = useState<number>(0)
   const [newTask, setNewTask] = useState<TaskFormState>({ id: count, task: "", complete: false });
-  const [list, setList] = useState<TaskFormState[]>(
-    [],
-  );
+  const [list, setList] = useState<TaskFormState[]>([]);
 
   const [error, setError] = useState<boolean>(false);
   const [helperText, setHelperText] = useState<string>("");
   const [edit, setEdit] = useState<boolean>(false)
   const [estado, setEstado] = useState<string>("todas");
 
-  //estados que controlan confirm Dialog
+  const { loading, snackState, CloseSnackState } = useLocalStorage(list)
 
+
+  //estados que controlan confirm Dialog
   const INITIAL_STATE_DIALOG =
   {
     open: false,
@@ -39,15 +41,15 @@ const App: React.FC = () => {
     elemento: "",
     onConfirm: () => console.log("no agrego funcion"),
   }
+  const [confirmDialog, setConfirmDialog] = useState<IConfirmDialogState>(INITIAL_STATE_DIALOG);
 
-  const [confirmDialog, setConfirmDialog] = useState<ConfirmDialogState>(INITIAL_STATE_DIALOG);
-
-  const handleClose = (): void => {
+  const handleCloseConfirmDialog = (): void => {
     setConfirmDialog(INITIAL_STATE_DIALOG);
   }
 
+
   //hook form
-  const { handleSubmit, reset, clearErrors } = useForm({});
+  const { reset } = useForm({});
 
   const verificacion = (task: string): boolean => {
     let repeti2 = list.find(item => item.task.toUpperCase() === task.toUpperCase())
@@ -94,19 +96,15 @@ const App: React.FC = () => {
           return obj;
         });
         setList(newArr);
-        setNewTask({ id: count, task: "", complete: false })
-        setEdit(false)
-        reset();
 
       } else {
         setList([...list, newTask])
-        setNewTask({ id: count, task: "", complete: false })
         setCount(count + 1)
-        setStorage(list);
-
-        reset();
       }
 
+      setNewTask({ id: count, task: "", complete: false })
+      setEdit(false)
+      reset();
     }
     e.preventDefault();
   }
@@ -118,7 +116,7 @@ const App: React.FC = () => {
   }
 
   //funcion que controla el checkbox
-  const completeTask = (e: React.MouseEvent<HTMLButtonElement>, item: TaskFormState): void => {
+  const completeTask = (e: React.ChangeEvent<HTMLInputElement>, item: TaskFormState): void => {
     const newArr = list.map(obj => {
       if (obj.id === item.id) {
         item.complete = !item.complete
@@ -139,10 +137,10 @@ const App: React.FC = () => {
       onConfirm: () => {
         let newArr = list.filter(elem => elem.id !== item.id)
         setList(newArr);
-        handleClose();
+        handleCloseConfirmDialog();
+
       },
     });
-
   }
 
   const changeState = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
@@ -150,26 +148,20 @@ const App: React.FC = () => {
   }
 
   //funcion para filtrar lista
-  const filterList = (): TaskFormState[] | undefined => {
-    if (estado === "todas") { return list }
-    else if (estado === "completadas") { return list.filter(item => item?.complete) }
+  const filterList = (): TaskFormState[] | any[] => {
+    if (estado === "completadas") { return list.filter(item => item?.complete) }
     else if (estado === "pendientes") { return list.filter(item => !item?.complete) }
+    else { return list }
   }
-
-  useEffect(() => {
-    setStorage(list)
-  }, [list])
 
 
   return (
     <div className='general-container'>
-
       <Header />
       <Form error={error} helperText={helperText} newTask={newTask} addNew={addNew} handleChange={handleChange} edit={edit} />
-
-      {confirmDialog && <ConfirmDialog confirmDialog={confirmDialog} handleClose={handleClose} />}
-
-      <ToDoList list={list} editTask={editTask} completeTask={completeTask} deleteTask={deleteTask} estado={estado} filterList={filterList} changeState={changeState} />
+      <ToDoList list={list} editTask={editTask} completeTask={completeTask} deleteTask={deleteTask} estado={estado} filterList={filterList} changeState={changeState} loading={loading} />
+      <ConfirmDialog open={confirmDialog.open} accion={confirmDialog.accion} elemento={confirmDialog.elemento} onConfirm={confirmDialog.onConfirm} handleClose={handleCloseConfirmDialog} />
+      <SnackBar open={snackState.open} message={snackState.message} severity={snackState.severity} handleClose={CloseSnackState} />
 
     </div>
 

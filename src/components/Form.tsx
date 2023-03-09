@@ -1,9 +1,12 @@
 
 import { Grid, TextField, Container, Button } from '@mui/material';
 import '../App.css';
+import { IForm } from '../models/interface';
 
 
-const Form: React.FC = ({ error, helperText, newTask, addNew, handleChange, edit }) => {
+const Form = (props: IForm) => {
+
+    const { error, helperText, newTask, addNew, handleChange, edit } = props
 
     return (
         <Container maxWidth="sm" className="form-container">

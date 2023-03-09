@@ -1,8 +1,10 @@
 import React from 'react'
 import { FormControl, InputLabel, Select, MenuItem } from '@mui/material';
+import { ISelectCustom } from '../models/interface';
 
 
-const SelectCustom = ({ estado, changeState }) => {
+const SelectCustom = (props: ISelectCustom) => {
+    const { estado, changeState } = props
     return (
         <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
             <InputLabel id="demo-simple-select-standard-label">Estado de tarea</InputLabel>

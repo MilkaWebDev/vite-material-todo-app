@@ -5,6 +5,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import WarningRoundedIcon from '@mui/icons-material/WarningRounded';
 import { Grid, Button, Typography } from '@mui/material';
+import { IConfirmDialogState } from '../models/interface';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     '& .MuiDialogContent-root': {
@@ -14,9 +15,9 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 }));
 
 
-export default function ConfirmDialog({ confirmDialog, handleClose }) {
+export default function ConfirmDialog(props: IConfirmDialogState) {
 
-    const { open, accion, elemento, onConfirm } = confirmDialog;
+    const { open, accion, elemento, onConfirm, handleClose } = props
 
     return (
         <div>
