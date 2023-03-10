@@ -1,6 +1,7 @@
 
 import { useState } from 'react';
 import './App.css';
+import moment from "moment";
 
 //hooks
 import { useForm } from "react-hook-form";
@@ -20,8 +21,7 @@ import SnackBar from './small-components/SnackBar';
 
 const App = () => {
   //estados
-  const [count, setCount] = useState<number>(0)
-  const [newTask, setNewTask] = useState<TaskFormState>({ id: count, task: "", complete: false });
+  const [newTask, setNewTask] = useState<TaskFormState>({ id: 0, task: "", complete: false });
   const [listaEnEspera, setListaEnEspera] = useState<TaskFormState[]>([]);
 
   const [error, setError] = useState<boolean>(false);
@@ -74,7 +74,7 @@ const App = () => {
       setNewTask({ ...newTask, task: task })
     }
     else {
-      setNewTask({ id: count, task: task, complete: false })
+      setNewTask({ id: Date.now(), task: task, complete: false })
     }
 
   }
@@ -93,10 +93,10 @@ const App = () => {
 
       } else {
         setListaEnEspera([...list, newTask])
-        setCount(count + 1)
+
       }
 
-      setNewTask({ id: count, task: "", complete: false })
+      setNewTask({ id: Date.now(), task: "", complete: false })
       setEdit(false)
       reset();
     }
