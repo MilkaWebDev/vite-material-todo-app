@@ -2,7 +2,7 @@ import React from 'react'
 import { Grid, Typography } from '@mui/material';
 import '../App.css';
 
-const Header = () => {
+const Header = ({ title }: { title: string }) => {
 
     return (
         <Grid className='header'>
@@ -10,7 +10,7 @@ const Header = () => {
                 fontSize: "25px",
                 color: "white",
                 fontWeight: 500
-            }}>To Do App</Typography>
+            }}>{title}</Typography>
         </Grid>
     )
 }

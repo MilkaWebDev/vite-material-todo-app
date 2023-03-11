@@ -151,7 +151,7 @@ const App = () => {
 
   return (
     <div className='general-container'>
-      <Header />
+      <Header title={"To Do App"} />
       <Form error={error} helperText={helperText} newTask={newTask} addNew={addNew} handleChange={handleChange} edit={edit} loading={loading} />
       <ToDoList list={list} editTask={editTask} completeTask={completeTask} deleteTask={deleteTask} estado={estado} filterList={filterList} changeState={changeState} loading={loading} />
       <ConfirmDialog open={confirmDialog.open} accion={confirmDialog.accion} elemento={confirmDialog.elemento} onConfirm={confirmDialog.onConfirm} handleClose={handleCloseConfirmDialog} />
